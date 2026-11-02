@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Misión SISE | Introducción Canvas</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600;700;800&display=swap');
+:root{
+  --sise:#FF0E49;
+  --sise-dark:#D90B3E;
+  --navy:#10182B;
+  --pink-soft:#FFF1F5;
+  --panel:#FFFFFF;
+  --bg:#F6F8FC;
+  --muted:#65718A;
+  --line:#E6EAF1;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);font-family:Barlow,Arial,sans-serif;color:var(--navy)}
+.wrap{max-width:1120px;margin:22px auto;padding:0 14px}
+.mission{position:relative;overflow:hidden;background:linear-gradient(135deg,#fff 0%,#fbfbfc 52%,#f4f4f5 100%);border:1px solid #e9edf4;border-radius:28px;box-shadow:0 20px 55px rgba(22,39,72,.10)}
+.mission:before{content:"";position:absolute;right:-120px;top:-150px;width:410px;height:410px;border-radius:50%;background:radial-gradient(circle,rgba(36,31,33,.08),rgba(36,31,33,0) 65%)}
+.mission:after{content:"";position:absolute;left:-120px;bottom:-170px;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(255,14,73,.14),rgba(255,14,73,0) 68%)}
+.top{position:relative;z-index:2;display:flex;align-items:center;justify-content:flex-end;gap:14px;padding:20px 5%;border-bottom:1px solid var(--line);background:rgba(255,255,255,.86)}
+.logo{display:flex;align-items:center;gap:12px}
+.wordmark{font:800 32px/1 'Barlow Condensed','Arial Narrow',sans-serif;letter-spacing:.8px;color:var(--sise)}
+.logo small{font-weight:800;color:#7a8498;letter-spacing:1.3px;font-size:11px}
+.status{display:inline-flex;align-items:center;gap:8px;border:1px solid #ffd7e3;background:#fff6f9;color:var(--sise);border-radius:999px;padding:8px 12px;font-size:12px;font-weight:800;letter-spacing:.7px}
+.status i{width:8px;height:8px;border-radius:50%;background:var(--sise);box-shadow:0 0 0 5px rgba(255,14,73,.10)}
+.hero{position:relative;z-index:2;display:grid;grid-template-columns:1.25fr .75fr;gap:34px;padding:52px 5% 34px;align-items:center}
+.eyebrow{color:var(--sise);font-size:13px;font-weight:800;letter-spacing:2.2px;text-transform:uppercase}
+h1{font:800 clamp(48px,7.5vw,86px)/.92 'Barlow Condensed','Arial Narrow',sans-serif;margin:16px 0 18px;letter-spacing:.2px}
+h1 .pink{color:var(--sise)}
+h1 .blue{color:var(--sise)}
+.lead{max-width:680px;color:var(--muted);font-size:19px;line-height:1.58;margin:0 0 24px}
+.badges{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 28px}
+.badge{background:#fff;border:1px solid #e9edf4;border-radius:999px;padding:9px 13px;font-size:13px;font-weight:800;color:#3b465e;box-shadow:0 6px 18px rgba(24,46,83,.05)}
+.badge b{color:var(--sise)}
+.cta{display:inline-flex;align-items:center;gap:12px;text-decoration:none;background:linear-gradient(90deg,var(--sise),#ff3166);color:#fff!important;padding:17px 26px;border-radius:14px;font-weight:800;font-size:18px;box-shadow:0 14px 30px rgba(255,14,73,.23);transition:.2s transform,.2s box-shadow}
+.cta:hover,.cta:focus{transform:translateY(-2px);box-shadow:0 17px 34px rgba(255,14,73,.28)}
+.cta:focus-visible{outline:3px solid rgba(255,14,73,.35);outline-offset:4px}
+.hint{display:block;margin-top:11px;color:#8a94a6;font-size:13px}
+.map-card{position:relative;min-height:330px;border:1px solid #e8edf5;border-radius:24px;background:linear-gradient(160deg,#fff 0%,#fafafa 65%,#f3f3f4 100%);box-shadow:0 14px 35px rgba(30,59,99,.09);padding:26px 24px;overflow:hidden}
+.map-card:before{content:"";position:absolute;width:260px;height:260px;border-radius:50%;right:-80px;top:-95px;background:#ffe8f0}
+.map-card h3{position:relative;margin:0 0 5px;font:800 26px 'Barlow Condensed','Arial Narrow',sans-serif}
+.map-card p{position:relative;margin:0;color:#748097;font-size:14px}
+.route{position:relative;margin-top:26px;padding:6px 0}
+.route:before{content:"";position:absolute;left:25px;top:31px;bottom:31px;width:4px;border-radius:9px;background:linear-gradient(var(--sise),#241F21)}
+.node{position:relative;display:grid;grid-template-columns:54px 1fr;gap:13px;align-items:center;margin:15px 0}
+.node .icon{width:52px;height:52px;border-radius:16px;background:#fff;border:1px solid #e5eaf2;display:grid;place-items:center;font-size:22px;box-shadow:0 6px 18px rgba(25,49,82,.08);z-index:2}
+.node strong{font-size:15px}
+.node span{display:block;color:#8a95a7;font-size:12px;margin-top:2px}
+.node.active .icon{background:#fff0f5;border-color:#ffc5d7;color:var(--sise)}
+.node.final .icon{background:#fff0f5;border-color:#ffc5d7;color:var(--sise)}
+.lower{position:relative;z-index:2;padding:16px 5% 46px}
+.panel{background:#fff;border:1px solid #e8edf5;border-radius:24px;padding:26px;box-shadow:0 12px 30px rgba(25,49,82,.06)}
+.panel-top{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:22px}
+.panel-top h2{margin:4px 0 0;font:800 34px 'Barlow Condensed','Arial Narrow',sans-serif}
+.panel-top small{color:#8b95a7;font-size:13px}
+.keys{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.key{position:relative;border:1px solid #e7ebf2;border-radius:18px;background:linear-gradient(180deg,#fff,#fbfcfe);padding:18px 14px;min-height:118px}
+.key .n{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:#fff0f5;color:var(--sise);font-weight:800;margin-bottom:12px}
+.key strong{display:block;font:800 18px 'Barlow Condensed','Arial Narrow',sans-serif;text-transform:uppercase}
+.key span{display:block;color:#8b95a7;font-size:12px;margin-top:4px}
+.key:nth-child(5) .n{background:#fff0f5;color:var(--sise)}
+.how{margin-top:20px;display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center;background:linear-gradient(90deg,#fff3f7,#f7f7f8);border:1px solid #f1dfe7;border-radius:18px;padding:18px 20px}
+.how b{color:var(--sise)}
+.how p{margin:0;color:#5d6a80;line-height:1.5;font-size:14px}
+.mini{font-size:24px}
+.footer{position:relative;z-index:2;padding:17px 5%;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;background:#fff;color:#7c8799;font-size:12px}
+@media(max-width:840px){.hero{grid-template-columns:1fr}.map-card{min-height:auto}.keys{grid-template-columns:repeat(2,minmax(0,1fr))}.key:last-child{grid-column:1/-1}.panel-top{align-items:flex-start;flex-direction:column}}
+@media(max-width:560px){.wrap{margin:10px auto;padding:0 8px}.mission{border-radius:20px}.top{padding:16px 5%}.logo small{display:none}.hero{padding:36px 5% 24px}h1{font-size:48px}.lead{font-size:16px}.cta{width:100%;justify-content:center}.keys{grid-template-columns:1fr}.key:last-child{grid-column:auto}.how{grid-template-columns:1fr}.mini{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<main class="mission">
+  <header class="top">
+    <div class="status"><i></i> MISIÓN ACTIVADA</div>
+  </header>
+
+  <section class="hero">
+    <div>
+      <div class="eyebrow">MISIÓN SISE · EXPERIENCIA GAMIFICADA</div>
+      <h1>Activa <span class="pink">tu perfil profesional</span> con 5 llaves y <span class="blue">1 misión final.</span></h1>
+      <p class="lead">Explora salas, completa retos, consigue llaves y desbloquea recursos que te ayudarán a fortalecer tu perfil profesional. Cada avance te acerca a la Misión Final.</p>
+      <div class="badges">
+        <div class="badge"><b>5</b> salas de misión</div>
+        <div class="badge">🔑 Inventario de llaves</div>
+        <div class="badge">🎮 Minijuegos</div>
+        <div class="badge">🏆 Misión final</div>
+      </div>
+      <a class="cta" href="https://da-ite.github.io/Misi-nSISE_Juego/" target="_blank" rel="noopener noreferrer">ENTRAR A MISIÓN SISE <span>→</span></a>
+      <span class="hint">La experiencia se abrirá en una nueva pestaña para que puedas continuar tu progreso.</span>
+    </div>
+
+    <aside class="map-card" aria-label="Ruta de Misión SISE">
+      <h3>Mapa de misión</h3>
+      <p>Reúne las 5 llaves para completar tu recorrido.</p>
+      <div class="route">
+        <div class="node active"><div class="icon">🔎</div><div><strong>01 · Diagnóstico</strong><span>Descubre tu punto de partida</span></div></div>
+        <div class="node"><div class="icon">💎</div><div><strong>02 · Valor</strong><span>Construye tu propuesta profesional</span></div></div>
+        <div class="node"><div class="icon">🚀</div><div><strong>03 · Proyección</strong><span>Haz visible tu perfil</span></div></div>
+        <div class="node"><div class="icon">⚡</div><div><strong>04 · Presión</strong><span>Responde con claridad</span></div></div>
+        <div class="node final"><div class="icon">🏁</div><div><strong>05 · Simula</strong><span>Prepárate para la misión final</span></div></div>
+      </div>
+    </aside>
+  </section>
+
+  <footer class="footer"><span>Instituto SISE – Grupo EducaD · Misión SISE</span></footer>
+</main>
+</div>
+</body>
+</html>
